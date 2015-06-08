@@ -77,3 +77,4 @@ exclude:
     - CNAME
 
 encoding: utf-8
+excerpt_separator: ""
