@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Title of the document</title>
+</head>
+
+<body>
+  <pre id="console"></pre>
+</body>
+
+<script>
+var parseCSSText = function (styleContent) {
+    var doc = document.implementation.createHTMLDocument(""),
+              styleElement = document.createElement("style");
+    
+    styleElement.textContent = styleContent;
+    
+    // the style will only be parsed once it is added to a document
+    doc.body.appendChild(styleElement);
+        
+    [].forEach.call(styleElement.sheet.cssRules, function (cssRule) {
+      writeText("\ncssRule.cssText:", "'" + cssRule.cssText + "'");
+      
+    	if(cssRule.type === 1) // CSSRule.STYLE_RULE
+			{
+        // cssRule is of CSSStyleRule type
+        
+        // write the selector name
+        writeText("cssRule.selectorText:", "'" + cssRule.selectorText + "'");
+        
+        // cssRule.style is of CSSStyleDeclaration type which an array-like object where each item is the property name
+        var cssStyleDeclaration = cssRule.style;
+        writeText("\t" + "cssStyleDeclaration.cssText:", "'" + cssStyleDeclaration.cssText + "'");
+        
+        [].forEach.call(cssStyleDeclaration, function (propertyName) {
+          writeText("\t" + propertyName + ":", cssStyleDeclaration[propertyName]);
+        });
+      }
+		});
+    
+    
+    /*
+    alert(styleObj.cssText);
+    for (var i = styleObj.length-1; i >= 0; i--) {
+       var nameString = styleObj[i];
+       styleObj.removeProperty(nameString);
+    }
+    alert(styleObj.cssText)
+
+    
+    return styleElement.sheet.cssRules;*/
+};
+
+function writeText() {
+  var text = [].join.call(arguments, ' ') + '\n';
+	document.getElementById("console").textContent += text;
+}
+
+var rules = parseCSSText("span { font-size: 12pt; } body { background: #00ff00 url('http://www.w3schools.com/cssref/smiley.gif') no-repeat fixed center; }");
+
+</script>
+
+</html>
+
